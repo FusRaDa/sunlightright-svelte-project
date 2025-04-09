@@ -5,6 +5,7 @@
   let latitude: number | null = $state(null)
   let longitude: number | null = $state(null)
   let timezone: string | null = $state(null)
+  let currentDate: number | null = $state(null)
   let background: string = $state('--color-slate-950')
 
   let data: any = $derived.by(() => {
@@ -32,9 +33,15 @@
   }
 
   async function getWeather() {
-    const response = await fetch(`/weather?lat=${latitude}&lon=${longitude}&tz=${timezone}`)
-    data = await response.json()
-    setBackground(data)
+    if (currentDate != null && currentDate != new Date().getUTCDate()) {
+      const response = await fetch(`/weather?lat=${latitude}&lon=${longitude}&tz=${timezone}`)
+      data = await response.json()
+      setBackground(data)
+      let date = new Date(data.hourly.time[0].split("T")[0])
+      currentDate = date.getUTCDate()
+    } else {
+      alert("data already retrieved")
+    }
   }
 
   function setBackground(data: any) {
@@ -63,7 +70,8 @@
 
   //getLocation()
   $inspect(data)
-  $inspect(background)
+  // $inspect(background)
+  $inspect(currentDate)
   // let data = $props();
   // $inspect(data)
 </script>
@@ -91,7 +99,7 @@
 </div>
 
 <div class="@container px-6">
-  <div class="flex flex-col @md:flex-row bg-blue-500">
+  <div class="flex flex-col @md:flex-row bg-slate-500">
     dfdf
   </div>
 </div>
