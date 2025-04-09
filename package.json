@@ -38,6 +38,7 @@
 		"vite": "^6.2.5"
 	},
 	"dependencies": {
+		"chart.js": "^4.4.8",
 		"openmeteo": "^1.2.0"
 	}
 }

@@ -43,6 +43,8 @@ Features
 - implement open-meteo to get solar radiation for the day
 - implement local storage is save on API uses per session/user
 - get user's location coords and timezone
+- line chart to view hours and uv index for the day
+- pie chart to see the greatest and least amount of vitamin D produced for each hour where production is > 0
 
 
 **Current Tasks**
