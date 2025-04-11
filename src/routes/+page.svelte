@@ -7,9 +7,11 @@
   let longitude: number | null = $state(null)
   let timezone: string | null = $state(null)
   let currentDate: number | null = $state(null)
+  let data: any = $state(null)
   let background: string = $state('bg-neutral-400/100')
 
-  let data: any = $derived.by(() => {
+  // if lat, long, and tz are present call API unless localstorage already exists
+  $effect(() => {
     if (latitude && longitude && timezone) {
       getWeather()
     }
@@ -26,7 +28,6 @@
     if (localStorage.getItem('data') !== null || localStorage.getItem('data') == undefined) {
       const lsData: any = localStorage.getItem('data')
       data = JSON.parse(lsData)
-      setBackground(data)
     } else {
       localStorage.removeItem('data')
     }
@@ -49,6 +50,10 @@
   }
 
   async function getWeather() {
+    if (data !== null) {
+      setBackground(data)
+    }
+
     const lsLatitude = localStorage.getItem('latitude')
     const lsLongitude = localStorage.getItem('longitude')
     
@@ -105,33 +110,37 @@
     }
   }
 
+  function resetData() {
+    localStorage.removeItem('data')
+      localStorage.removeItem('currentDate')
+      localStorage.removeItem('latitude')
+      localStorage.removeItem('longitude')
+      getLocation()
+  }
+
   onMount(() => {
     // Client-side only code here
     getLocation()
   });
 
-  //$inspect(data)
-  $inspect(background)
+  //$inspect(background)
   //$inspect(currentDate)
 </script>
 
 
-<div class="h-screen {background}">
+<div class="h-screen {background} justify-items-center pt-10">
 
-  <div class="flex flex-col @md:flex-row bg-gray-500">
+  <div class="container bg-gray-500 p-3 mb-5">
     <h1>Welcome to SvelteKit</h1>
     <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-  
-    <h1 class="text-3xl font-bold underline">
-      {#if latitude && longitude && timezone}
-        Latitude: {latitude}
-        Longitude: {longitude}
-        Timezone: {timezone}
-        <Sun {latitude} {longitude} {timezone}/>
-      {/if}
-    </h1>
     <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
   </div>
+
+  {#if latitude && longitude && timezone && data}
+  <Sun {latitude} {longitude} {timezone} {data}/>
+  {:else}
+  <div>Failed to get data, button - try again</div>
+  {/if}
 
 </div>
 
