@@ -45,6 +45,7 @@ Features
 - get user's location coords and timezone
 - line chart to view hours and uv index for the day
 - pie chart to see the greatest and least amount of vitamin D produced for each hour where production is > 0
+- implement google maps with coords https://developers.google.com/maps/documentation/embed/quickstart
 
 
 **Current Tasks**

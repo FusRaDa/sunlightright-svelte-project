@@ -6,7 +6,7 @@
   let longitude: number | null = $state(null)
   let timezone: string | null = $state(null)
   let currentDate: number | null = $state(null)
-  let background: string = $state('--color-slate-950')
+  let background: string = $state('bg-neutral-400/100')
 
   let data: any = $derived.by(() => {
     if (latitude && longitude && timezone) {
@@ -21,6 +21,17 @@
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
+
+    if (localStorage.getItem('data') !== null) {
+      const lsData: any = localStorage.getItem('data')
+      data = JSON.parse(lsData)
+      setBackground(data)
+    }
+    
+    if (localStorage.getItem('currentDate') !== null) {
+      const lsCurrentDate = localStorage.getItem('currentDate')
+      currentDate = Number(lsCurrentDate)
+    }
   }
 
   function success(position: any) {
@@ -33,14 +44,21 @@
   }
 
   async function getWeather() {
-    if (currentDate != null && currentDate != new Date().getUTCDate()) {
+    const lsLatitude = localStorage.getItem('latitude')
+    const lsLongitude = localStorage.getItem('longitude')
+    
+    if (currentDate !== new Date().getDate() || Math.trunc(Number(latitude)) !== Math.trunc(Number(lsLatitude)) || Math.trunc(Number(longitude)) !== Math.trunc(Number(lsLongitude))) {
+      console.log("api fetch")
       const response = await fetch(`/weather?lat=${latitude}&lon=${longitude}&tz=${timezone}`)
       data = await response.json()
       setBackground(data)
       let date = new Date(data.hourly.time[0].split("T")[0])
       currentDate = date.getUTCDate()
-    } else {
-      alert("data already retrieved")
+
+      localStorage.setItem('data', JSON.stringify(data))
+      localStorage.setItem('currentDate', String(currentDate))
+      localStorage.setItem('latitude', String(latitude))
+      localStorage.setItem('longitude', String(longitude))
     }
   }
 
@@ -48,35 +66,49 @@
     let hour = new Date().getHours()
     let index = Math.round(data.hourly.uvIndex[hour])
     switch(true) {
-      case index === 1 || index === 2:
-        background = ""
+      case index === 1:
+        background = 'bg-neutral-400/100'
         break
-      case index === 3 || index === 4:
-        background = ""
+      case index === 2:
+        background = 'bg-neutral-400/90'
         break
-      case index === 3 || index === 4: 
-        background = ""
+      case index === 3: 
+        background = 'bg-neutral-400/80'
         break
-      case index === 3 || index === 4:
-        background = ""
+      case index === 4:
+        background = 'bg-neutral-400/70'
         break
-      case index === 3 || index === 4:
-        background = ""
+      case index === 5:
+        background = 'bg-neutral-400/60'
+        break
+      case index === 6:
+        background = 'bg-neutral-400/50'
+        break
+      case index === 7:
+        background = 'bg-neutral-400/40'
+        break
+      case index === 8:
+        background = 'bg-neutral-400/30'
+        break
+      case index === 9:
+        background = 'bg-neutral-400/20'
         break
       case index > 10:
-        background = ""
+        background = 'bg-neutral-400/10'
+      default:
+        background = 'bg-neutral-400/100'
     }
   }
 
   //getLocation()
   $inspect(data)
-  // $inspect(background)
+  $inspect(background)
   $inspect(currentDate)
   // let data = $props();
   // $inspect(data)
 </script>
 
-<div class="@container px-6">
+<div class="h-screen {background}">
   <div class="flex flex-col @md:flex-row bg-gray-500">
     <h1>Welcome to SvelteKit</h1>
     <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
@@ -89,18 +121,10 @@
         <Sun {latitude} {longitude} {timezone}/>
       {/if}
     </h1>
-  
-    {#if data}
-      <h4>{data}</h4>
-    {/if}
-  
-    <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
-  </div>
-</div>
+    
+    {data}
 
-<div class="@container px-6">
-  <div class="flex flex-col @md:flex-row bg-slate-500">
-    dfdf
+    <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
   </div>
 </div>
 
@@ -108,6 +132,6 @@
 <style lang="postcss">
   @reference "tailwindcss";
   :global(html) {
-    background-color: theme(--color-gray-100);
+    background-color: theme(--color-amber-300);
   }
 </style>
