@@ -123,6 +123,7 @@
     getLocation()
   });
 
+  $inspect(data)
   //$inspect(background)
   //$inspect(currentDate)
 </script>
@@ -136,8 +137,8 @@
     <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
   </div>
 
-  {#if latitude && longitude && timezone && data}
-  <Sun {latitude} {longitude} {timezone} {data}/>
+  {#if latitude && longitude && data}
+  <Sun {latitude} {longitude} {data}/>
   {:else}
   <div>Failed to get data, button - try again</div>
   {/if}
