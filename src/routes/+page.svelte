@@ -1,5 +1,6 @@
 <script lang="ts">
   import Sun from "$lib/components/Sun.svelte";
+  import { onMount } from 'svelte'
   import img from '$lib/assets/sunset-7324598_1280.jpg'
 
   let latitude: number | null = $state(null)
@@ -22,15 +23,19 @@
       console.error("Geolocation is not supported by this browser.");
     }
 
-    if (localStorage.getItem('data') !== null) {
+    if (localStorage.getItem('data') !== null || localStorage.getItem('data') == undefined) {
       const lsData: any = localStorage.getItem('data')
       data = JSON.parse(lsData)
       setBackground(data)
+    } else {
+      localStorage.removeItem('data')
     }
     
-    if (localStorage.getItem('currentDate') !== null) {
+    if (localStorage.getItem('currentDate') !== null || localStorage.getItem('currentDate') !== undefined) {
       const lsCurrentDate = localStorage.getItem('currentDate')
       currentDate = Number(lsCurrentDate)
+    } else {
+      localStorage.removeItem('currentDate')
     }
   }
 
@@ -100,15 +105,19 @@
     }
   }
 
-  //getLocation()
-  $inspect(data)
+  onMount(() => {
+    // Client-side only code here
+    getLocation()
+  });
+
+  //$inspect(data)
   $inspect(background)
-  $inspect(currentDate)
-  // let data = $props();
-  // $inspect(data)
+  //$inspect(currentDate)
 </script>
 
+
 <div class="h-screen {background}">
+
   <div class="flex flex-col @md:flex-row bg-gray-500">
     <h1>Welcome to SvelteKit</h1>
     <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
@@ -121,11 +130,9 @@
         <Sun {latitude} {longitude} {timezone}/>
       {/if}
     </h1>
-    
-    {data}
-
     <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
   </div>
+
 </div>
 
 
