@@ -1,9 +1,10 @@
 <script lang="ts">
   import Chart from 'chart.js/auto';
+  import ChartDataLabels from 'chartjs-plugin-datalabels';
   import { onMount } from 'svelte';
   
   // Vitamin d rates
-  const VITAMIN_D_RATES = {
+  const VITAMIN_D_RATES: any = {
     'skin1': {
       "index1": 2634.57,
       "index2": 3371.25,
@@ -108,6 +109,24 @@
     },
   }
 
+  const RADIANCE_RATES: any = {
+    "index1": 0.025,
+    "index2": 0.050,
+    "index3": 0.075,
+    "index4": 0.100,
+    "index5": 0.125,
+    "index6": 0.150,
+    "index7": 0.175,
+    "index8": 0.200,
+    "index9": 0.225,
+    "index10": 0.250,
+    "index11": 0.275,
+    "index12": 0.300,
+    "index13": 0.325,
+    "index14": 0.350,
+    "index15": 0.375
+  }
+
   // factors
   let skin: number = $state(1)
   let age: number = $state(1)
@@ -122,8 +141,35 @@
     }
     return null
   })
+
   let exposure: number = $state(1)
   let unilateral: boolean = $state(true)
+  let final_bsa: number | undefined = $derived.by(() => {
+    if (bsa) {
+      let per: number = 1
+      switch(exposure) {
+        case 1:
+          per = 0.12
+          break
+        case 2:
+          per = 0.26
+          break
+        case 3:
+          per = 0.46
+          break
+        case 4:
+          per = 0.72
+          break
+        case 5:
+          per = 0.95
+          break
+      }
+      if (unilateral) {
+        return bsa * per * 0.5
+      }
+      return bsa * per
+    }
+  })
   //factors
 
   let {
@@ -175,7 +221,6 @@
 
   function buildUVIChart() {
     var ctx: any = document.getElementById('lineChart');
-    var today = new Date().toLocaleDateString()
 
     new Chart(ctx, {
       type: 'line',
@@ -192,15 +237,88 @@
           },
           title: {
             display: true,
-            text: today,
+            text: new Date().toLocaleDateString(),
           }
         },
       }
     });
   }
 
+  let rateChartData = $derived.by(() => {
+    let formatData: any = {}
+
+    for (let key in UVIChartData.datasets[0].data) {
+      let uv = Math.round(UVIChartData.datasets[0].data[key])
+      if (uv > 0) {
+        let keySkin: string = 'skin' + String(skin)
+        let keyIndex: string = 'index' + String(uv)
+        if (final_bsa) {
+          formatData[key] = Math.round(VITAMIN_D_RATES[keySkin][keyIndex] * final_bsa * RADIANCE_RATES[keyIndex])
+        } else {
+          formatData[key] = 0
+        }
+      }
+    }
+
+    let labels = []
+    let values = []
+
+    for (let key in formatData) {
+      labels.push(key)
+      values.push(formatData[key])
+    }
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Rate',
+          data: values,
+          borderColor: 'rgb(255, 159, 64)',
+          backgroundColor: 'rgb(255, 159, 64)',
+          fill: true,
+        }
+      ]
+    }
+  })
+
   function buildRateChart() {
-   
+    let chartStatus = Chart.getChart("barChart")
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+      console.log('dest')
+    }
+
+    var ctx: any = document.getElementById('barChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: rateChartData,
+      options: {
+        responsive: true,
+        interaction: {
+          intersect: false,
+          axis: 'x'
+        },
+        plugins: {
+          datalabels: {
+            rotation: 0,
+            anchor: 'end',
+            align: 'end',
+            labels: {
+                value: {
+                  color: 'black'
+                }
+              }
+          },
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+          },
+        },
+      }
+    });
   }
 
   function setSkin(this: any) {
@@ -281,10 +399,13 @@
     }
   }
 
-  onMount(() => {
-    //build charts
-    buildUVIChart()
+  $effect(() => {
+    if (final_bsa) {
+      buildRateChart()
+    }
+  })
 
+  onMount(() => {
     //load localStorage
     const lsExposure = localStorage.getItem('exposure')
     if (lsExposure) {
@@ -310,6 +431,10 @@
     if (lsWeight) {
       weight = Number(lsWeight)
     }
+
+    //build charts
+    Chart.register(ChartDataLabels);
+    buildUVIChart()
   })
 </script>
 
@@ -480,7 +605,7 @@
 <div class="container bg-white">
   <div class="grid sm:grid-cols-3 gap-2">
     <div class="p-2">
-      <p class="text-sm text-center underline font-bold">Rate of Vitamin D Production (IU/W&#8901;min)</p>
+      <p class="text-sm text-center underline font-bold">Rate of Vitamin D Production (IU/min)</p>
       <div class="flex items-center">
         <canvas id="barChart"></canvas>
       </div>
