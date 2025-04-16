@@ -1,6 +1,112 @@
 <script lang="ts">
   import Chart from 'chart.js/auto';
   import { onMount } from 'svelte';
+  
+  // Vitamin d rates
+  const VITAMIN_D_RATES = {
+    'skin1': {
+      "index1": 2634.57,
+      "index2": 3371.25,
+      "index3": 3763.67,
+      "index4": 3951.85,
+      "index5": 4064.76,
+      "index6": 4159.84,
+      "index7": 4190.48,
+      "index8": 4234.13,
+      "index9": 4272.27,
+      "index10": 4311.11,
+      "index11": 4311.11,
+      "index12": 4311.11,
+      "index13": 4377.44,
+      "index14": 4324.21,
+      "index15": 4411.37,
+    },
+    'skin2': {
+      "index1": 2544.99,
+      "index2": 3256.63,
+      "index3": 3635.70,
+      "index4": 3817.49,
+      "index5": 3926.56,
+      "index6": 4018.41,
+      "index7": 4048.00,
+      "index8": 4090.17,
+      "index9": 4127.02,
+      "index10": 4164.53,
+      "index11": 4164.53,
+      "index12": 4164.53,
+      "index13": 4228.60,
+      "index14": 4177.19,
+      "index15": 4261.38,
+    },
+    'skin3': {
+      "index1": 2464.05,
+      "index2": 3153.05,
+      "index3": 3520.08,
+      "index4": 3696.08,
+      "index5": 3801.68,
+      "index6": 3890.61,
+      "index7": 3919.26,
+      "index8": 3960.09,
+      "index9": 3995.76,
+      "index10": 4032.09,
+      "index11": 4032.09,
+      "index12": 4032.09,
+      "index13": 4094.12,
+      "index14": 4044.34,
+      "index15": 4125.86,
+    },
+    'skin4': {
+      "index1": 2388.16,
+      "index2": 3055.94,
+      "index3": 3411.66,
+      "index4": 3582.24,
+      "index5": 3684.59,
+      "index6": 3770.78,
+      "index7": 3798.55,
+      "index8": 3838.12,
+      "index9": 3872.70,
+      "index10": 3907.90,
+      "index11": 3907.90,
+      "index12": 3907.90,
+      "index13": 3968.02,
+      "index14": 3919.78,
+      "index15": 3998.78,
+    },
+    'skin5': {
+      "index1": 2316.94,
+      "index2": 2964.81,
+      "index3": 3309.92,
+      "index4": 3475.41,
+      "index5": 3574.71,
+      "index6": 3658.33,
+      "index7": 3685.27,
+      "index8": 3723.66,
+      "index9": 3757.20,
+      "index10": 3791.36,
+      "index11": 3791.36,
+      "index12": 3791.36,
+      "index13": 3849.69,
+      "index14": 3802.88,
+      "index15": 3879.53,
+    },
+    'skin6': {
+      "index1": 2249.96,
+      "index2": 2879.09,
+      "index3": 3214.22,
+      "index4": 3374.93,
+      "index5": 3471.36,
+      "index6": 3552.56,
+      "index7": 3578.72,
+      "index8": 3616.00,
+      "index9": 3648.58,
+      "index10": 3681.75,
+      "index11": 3681.75,
+      "index12": 3681.75,
+      "index13": 3738.39,
+      "index14": 3692.94,
+      "index15": 3767.37,
+    },
+  }
 
   // factors
   let skin: number = $state(1)
@@ -30,7 +136,7 @@
     data: any
   } = $props();
 
-  let chartData = $derived.by(() => {
+  let UVIChartData = $derived.by(() => {
     let formatData: any = {}
     for (let key in data.hourly.uvIndex) {
       if (data.hourly.uvIndex.hasOwnProperty(key)) {
@@ -68,12 +174,12 @@
   })
 
   function buildUVIChart() {
-    const ctx: any = document.getElementById('lineChart');
-    const today = new Date().toLocaleDateString()
+    var ctx: any = document.getElementById('lineChart');
+    var today = new Date().toLocaleDateString()
 
     new Chart(ctx, {
       type: 'line',
-      data: chartData,
+      data: UVIChartData,
       options: {
         responsive: true,
         interaction: {
@@ -86,11 +192,15 @@
           },
           title: {
             display: true,
-            text: today + ' UV Index',
+            text: today,
           }
         },
       }
     });
+  }
+
+  function buildRateChart() {
+   
   }
 
   function setSkin(this: any) {
@@ -172,27 +282,58 @@
   }
 
   onMount(() => {
+    //build charts
     buildUVIChart()
+
+    //load localStorage
+    const lsExposure = localStorage.getItem('exposure')
+    if (lsExposure) {
+      exposure = Number(lsExposure)
+    }
+
+    const lsSkin = localStorage.getItem('skin')
+    if (lsSkin) {
+      skin = Number(lsSkin)
+    }
+
+    const lsAge = localStorage.getItem('age')
+    if (lsAge) {
+      age = Number(lsAge)
+    }
+
+    const lsHeight = localStorage.getItem('height')
+    if (lsHeight) {
+      height = Number(lsHeight)
+    }
+
+    const lsWeight = localStorage.getItem('weight')
+    if (lsWeight) {
+      weight = Number(lsWeight)
+    }
   })
-
-
 </script>
 
-<div class="container bg-white">
+
+<div class="container bg-white mb-5">
   <div class="grid sm:grid-cols-3 gap-2">
 
-    <div class="flex items-center">
-      <iframe title="google-maps-embed-api" width="100%" height="300px" style="border:0" loading="lazy" allowfullscreen
-        src="https://www.google.com/maps/embed/v1/place?q={latitude}%2C%20{longitude}&key={import.meta.env.VITE_GOOGLE_MAPS_API}">
-      </iframe>
-    </div>
-
-    <div class="flex items-center">
-      <canvas id="lineChart"></canvas>
+    <div class="p-2">
+      <p class="text-sm text-center underline font-bold">Location</p>
+      <div class="flex items-center">
+        <iframe title="google-maps-embed-api" width="100%" height="300px" style="border:0" loading="lazy" allowfullscreen
+          src="https://www.google.com/maps/embed/v1/place?q={latitude}%2C%20{longitude}&key={import.meta.env.VITE_GOOGLE_MAPS_API}">
+        </iframe>
+      </div>
     </div>
 
     <div class="p-2">
+      <p class="text-sm text-center underline font-bold">Today's UV Index</p>
+      <div class="flex items-center">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
 
+    <div class="p-2">
       <div class="grid grid-rows-3 gap-4">
         <div>
           <p class="text-sm text-center underline font-bold">Skin Type (Fitzpatrick Scale)</p>
@@ -272,14 +413,14 @@
 
             <div class="mt-2">
               <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">HGT (cm) &nbsp;</div>
+                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">Hgt. (cm) &nbsp;</div>
                 <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=0 max=305 bind:value={height}>
               </div>
             </div>
 
             <div class="mt-2">
               <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">WGT (kg) &nbsp;</div>
+                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">Wgt. (kg) &nbsp;</div>
                 <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=0 max=500 bind:value={weight}>
               </div>
             </div>
@@ -331,12 +472,31 @@
           </div>
         </div>
       </div>
-
     </div>
 
   </div>
-
 </div>
+
+<div class="container bg-white">
+  <div class="grid sm:grid-cols-3 gap-2">
+    <div class="p-2">
+      <p class="text-sm text-center underline font-bold">Rate of Vitamin D Production (IU/W&#8901;min)</p>
+      <div class="flex items-center">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+    <div class="p-2">
+      <p class="text-sm text-center underline font-bold">Total Vitamin D Produced Per Hour</p>
+    </div>
+
+    <div class="p-2">
+      <p class="text-sm text-center underline font-bold">Set Goal & Estimate Actions</p>
+    </div>
+
+  </div>
+</div>
+
 
 <style>
   .skintype1 {

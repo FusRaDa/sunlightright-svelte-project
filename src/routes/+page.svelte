@@ -129,7 +129,7 @@
 </script>
 
 
-<div class="h-screen {background} justify-items-center pt-10">
+<div class="sm:h-screen {background} justify-items-center pt-10">
 
   <div class="container bg-gray-500 p-3 mb-5">
     <h1>Welcome to SvelteKit</h1>
