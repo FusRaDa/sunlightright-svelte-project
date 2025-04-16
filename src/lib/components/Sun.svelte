@@ -145,6 +145,22 @@
   let exposure: number = $state(1)
   let unilateral: boolean = $state(true)
   let final_bsa: number | undefined = $derived.by(() => {
+    let agePer = 1
+    switch(age) {
+      case 1:
+        agePer = 1
+        break
+      case 2:
+        agePer = 0.83
+        break
+      case 3:
+        agePer = 0.66
+        break
+      case 4:
+        agePer = 0.49
+        break
+    }
+
     if (bsa) {
       let per: number = 1
       switch(exposure) {
@@ -165,10 +181,17 @@
           break
       }
       if (unilateral) {
-        return bsa * per * 0.5
+        return bsa * per * 0.5 * agePer
       }
-      return bsa * per
+      return bsa * per * agePer
     }
+  })
+  let totalVitD: number = $derived.by(() => {
+    let total = 0
+    for (let i = 0; i < totalChartData.datasets[0].data.length; i++) {
+      total += totalChartData.datasets[0].data[i]
+    } 
+    return total
   })
   //factors
 
@@ -245,7 +268,8 @@
   }
 
   let rateChartData = $derived.by(() => {
-    let formatData: any = {}
+    let labels: Array<string> = []
+    let values: Array<number> = []
 
     for (let key in UVIChartData.datasets[0].data) {
       let uv = Math.round(UVIChartData.datasets[0].data[key])
@@ -253,19 +277,13 @@
         let keySkin: string = 'skin' + String(skin)
         let keyIndex: string = 'index' + String(uv)
         if (final_bsa) {
-          formatData[key] = Math.round(VITAMIN_D_RATES[keySkin][keyIndex] * final_bsa * RADIANCE_RATES[keyIndex])
+          values.push(Math.round(VITAMIN_D_RATES[keySkin][keyIndex] * final_bsa * RADIANCE_RATES[keyIndex]))
+          labels.push(key)
         } else {
-          formatData[key] = 0
+          values.push(0)
+          labels.push(key)
         }
       }
-    }
-
-    let labels = []
-    let values = []
-
-    for (let key in formatData) {
-      labels.push(key)
-      values.push(formatData[key])
     }
 
     return {
@@ -315,6 +333,75 @@
           },
           title: {
             display: true,
+          },
+        },
+      }
+    });
+  }
+
+  let totalChartData = $derived.by(() => {
+    let labels: Array<string> = []
+    let values: Array<number> = []
+
+    for (let i = 0; i < rateChartData.labels.length; i++) {
+      labels.push(rateChartData.labels[i])
+      values.push(rateChartData.datasets[0].data[i] * 60)
+    }
+
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Total Vit. D',
+          data: values,
+          backgroundColor: ['rgb(255, 159, 64)', 'rgb(255, 205, 86)',],
+          fill: true,
+        }
+      ]
+    } 
+
+  })
+
+  function buildTotalChart() {
+    let chartStatus = Chart.getChart("polarChart")
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+    }
+
+    var ctx: any = document.getElementById('polarChart');
+    new Chart(ctx, {
+      type: 'polarArea',
+      data: totalChartData,
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            pointLabels: {
+              display: true,
+              centerPointLabels: true,
+              font: {
+                size: 12,
+              }
+            }
+          }
+        },
+        interaction: {
+          intersect: false,
+          axis: 'x'
+        },
+        plugins: {
+          datalabels: {
+            rotation: -45,
+            anchor: 'center',
+            align: 'end',
+            labels: {
+                value: {
+                  color: 'black'
+                }
+              }
+          },
+          legend: {
+            display: false
           },
         },
       }
@@ -402,6 +489,7 @@
   $effect(() => {
     if (final_bsa) {
       buildRateChart()
+      buildTotalChart()
     }
   })
 
@@ -609,14 +697,20 @@
       <div class="flex items-center">
         <canvas id="barChart"></canvas>
       </div>
+      <p class="text-sm text-center underline font-bold">Description how i got this data???</p>
+      <p>adsfadsfadsfasdfasdf</p>
     </div>
 
     <div class="p-2">
       <p class="text-sm text-center underline font-bold">Total Vitamin D Produced Per Hour</p>
+      <div class="flex items-center">
+        <canvas id="polarChart"></canvas>
+      </div>
     </div>
 
     <div class="p-2">
       <p class="text-sm text-center underline font-bold">Set Goal & Estimate Actions</p>
+      <p class="text-sm text-center underline font-bold">Total Day: {totalVitD} IU's</p>
     </div>
 
   </div>
