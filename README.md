@@ -49,6 +49,8 @@ Features
 
 
 **Current Tasks**
+- Set current Vit D goal variable & determine most optimal hours w/ less time spent under sunshine
+- Include research and methods
 
 
 **Future Tasks**

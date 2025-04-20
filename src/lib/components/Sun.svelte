@@ -126,7 +126,7 @@
     "index14": 0.350,
     "index15": 0.375
   }
-
+  
   // factors
   let skin: number = $state(1)
   let age: number = $state(1)
@@ -357,7 +357,7 @@
           backgroundColor: ['rgb(255, 159, 64)', 'rgb(255, 205, 86)',],
           fill: true,
         }
-      ]
+      ],
     } 
 
   })
@@ -376,6 +376,10 @@
         responsive: true,
         scales: {
           r: {
+            ticks: {
+              display:false
+            },
+            startAngle: 225,
             pointLabels: {
               display: true,
               centerPointLabels: true,
@@ -486,6 +490,72 @@
     }
   }
 
+  let goal: number = $state(600)
+  let optimalMsg: string = $derived.by(() => {
+    interface OptimalRates {
+      time: string,
+      rate: number,
+    }
+    let rates: Array<OptimalRates> = []
+
+    for (let i = 0; i < rateChartData.labels.length; i++) {
+      if (rates.length === 0) {
+        rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
+      } else {
+        if (rateChartData.datasets[0].data[i] === rates[0]['rate']) {
+          rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
+        }
+
+        if (rateChartData.datasets[0].data[i] > rates[0]['rate']) {
+          rates = []
+          rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
+        } 
+      }
+    }
+
+    let finalString: string = ''
+    let hoursStr: string = ''
+    let total: number = 0
+    let timeStr: string = ''
+
+    rates.forEach((e, i, arr) => {
+      if (i === arr.length - 1) {
+        hoursStr += `and/or ${e.time}`
+      } else {
+        hoursStr += `${e.time}, `
+      }
+      total += (e.rate * 60)
+    })
+
+    let min: number = 1
+    let withinHours: boolean = false
+    while (min < (rates.length * 60) && goal <= total) {
+      if (rates[0].rate * min > goal) {
+        withinHours = true
+        break
+      }
+      min++
+    } 
+
+    if (withinHours) {
+      timeStr = String(min) + ' minutes'
+      finalString = `it is best to go out at ${hoursStr} for ${timeStr}.`
+    } else {
+
+      finalString = "you must spend more time outside of peak sunglight hours. Be aware that such prolonged exposure may increase your risk of sunburn and skin-related cancers."
+    }
+
+
+
+    return finalString
+  })
+
+  function setGoal() {
+    if (goal > 0) {
+      localStorage.setItem('goal', String(goal))
+    }
+  }
+
   $effect(() => {
     if (final_bsa) {
       buildRateChart()
@@ -520,10 +590,17 @@
       weight = Number(lsWeight)
     }
 
+    const lsGoal = localStorage.getItem('goal')
+    if (lsGoal) {
+      goal = Number(lsGoal)
+    }
+
     //build charts
     Chart.register(ChartDataLabels);
     buildUVIChart()
   })
+
+  $inspect(optimalMsg)
 </script>
 
 
@@ -648,6 +725,11 @@
           </div>
         </div>
 
+        <div class="flex items-center justify-center">
+          <p class="text-sm">Unilateral Exposure &nbsp;</p>
+          <input type="checkbox" bind:checked={unilateral}/>
+        </div>
+
         <div>
           <div>
             <p class="text-sm text-center underline font-bold">Exposure</p>
@@ -702,7 +784,7 @@
     </div>
 
     <div class="p-2">
-      <p class="text-sm text-center underline font-bold">Total Vitamin D Produced Per Hour</p>
+      <p class="text-sm text-center underline font-bold">Total Vitamin D Produced Per Hour (IU/hr)</p>
       <div class="flex items-center">
         <canvas id="polarChart"></canvas>
       </div>
@@ -710,7 +792,33 @@
 
     <div class="p-2">
       <p class="text-sm text-center underline font-bold">Set Goal & Estimate Actions</p>
-      <p class="text-sm text-center underline font-bold">Total Day: {totalVitD} IU's</p>
+      <p class="text-sm text-center underline font-bold">Estimated Total: {totalVitD} IU ({totalVitD / 40} mcg) </p>
+
+      <div class="grid grid-cols-2 gap-2">
+
+        <div class="p-2">
+          <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+            <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">Daily Goal &nbsp;</div>
+            <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=400 bind:value={goal} onchange={setGoal}>
+          </div>
+
+          <p class="text-sm underline font-bold mt-3">Optimal Times...</p>
+          <p class="text-sm">
+            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, {optimalMsg}
+          </p>
+
+          <p class="text-sm underline font-bold mt-3">Other Factors...</p>
+          <p class="text-sm">
+            what other factors affect vit d production? etc...
+          </p>
+        </div>
+
+        <div class="p-2">
+         <p class="text-sm">According to the <a target="_blank" class="text-blue-800" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">NIH</a>, 600 IUs is recommended per day for adults ages 19-70. </p>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
