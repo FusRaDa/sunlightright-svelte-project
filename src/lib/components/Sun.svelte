@@ -274,6 +274,7 @@
     for (let key in UVIChartData.datasets[0].data) {
       let uv = Math.round(UVIChartData.datasets[0].data[key])
       if (uv > 0) {
+        console.log(key)
         let keySkin: string = 'skin' + String(skin)
         let keyIndex: string = 'index' + String(uv)
         if (final_bsa) {
@@ -542,7 +543,7 @@
       finalString = `it is best to go out at ${hoursStr} for ${timeStr}.`
     } else {
 
-      finalString = "you must spend more time outside of peak sunglight hours. Be aware that such prolonged exposure may increase your risk of sunburn and skin-related cancers."
+      finalString = "you must spend more time outside of peak sunglight hours. Be aware that prolonged exposure over may increase your risk of sunburn and skin-related cancers."
     }
 
 
@@ -599,8 +600,6 @@
     Chart.register(ChartDataLabels);
     buildUVIChart()
   })
-
-  $inspect(optimalMsg)
 </script>
 
 
