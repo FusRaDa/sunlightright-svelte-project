@@ -243,8 +243,14 @@
   })
 
   function buildUVIChart() {
-    var ctx: any = document.getElementById('lineChart');
+    let chartStatus = Chart.getChart("lineChart")
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+      console.log('dest')
+    }
 
+    var ctx: any = document.getElementById('lineChart');
+    
     new Chart(ctx, {
       type: 'line',
       data: UVIChartData,
@@ -274,7 +280,6 @@
     for (let key in UVIChartData.datasets[0].data) {
       let uv = Math.round(UVIChartData.datasets[0].data[key])
       if (uv > 0) {
-        console.log(key)
         let keySkin: string = 'skin' + String(skin)
         let keyIndex: string = 'index' + String(uv)
         if (final_bsa) {
@@ -771,6 +776,7 @@
   </div>
 </div>
 
+{#if final_bsa}
 <div class="container bg-white">
   <div class="grid sm:grid-cols-3 gap-2">
     <div class="p-2">
@@ -822,6 +828,7 @@
 
   </div>
 </div>
+{/if}
 
 
 <style>

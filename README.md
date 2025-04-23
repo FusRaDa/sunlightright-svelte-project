@@ -50,7 +50,15 @@ Features
 
 
 **Current Tasks**
+- Change page header to represent Sunlight Right Project
 - Include research and methods
-
+  - Explain how rate of vitamin D (IU/min) was gathered and refer to article
+  - Explain how skin tone, age, bsa, unilateral exposure, and exposure affect these rates
+- Explain other factors that were not accounted for such as BMI
+- Depict RDA of vitamin D and question adequacy and risks of too much solar radiation
+- Bottom section of page should explain why this app was made
+  - Vitamin D deficiency and increasing rates of chronic diseases such as cancer and cardiovascular diseases
+  - Benefits of vitamin D to the human body, etc...
 
 **Future Tasks**
+- Implement Google Analytics
