@@ -777,7 +777,7 @@
 </div>
 
 {#if final_bsa}
-<div class="container bg-white">
+<div class="container bg-white mb-5">
   <div class="grid sm:grid-cols-3 gap-2">
     <div class="p-2">
       <p class="text-sm text-center underline font-bold">Rate of Vitamin D Production (IU/min)</p>
@@ -797,7 +797,7 @@
 
     <div class="p-2">
       <p class="text-sm text-center underline font-bold">Set Goal & Estimate Actions</p>
-      <p class="text-sm text-center underline font-bold">Estimated Total: {totalVitD} IU ({totalVitD / 40} mcg) </p>
+      <p class="text-sm text-center font-semibold">Estimated Total: {totalVitD} IU ({totalVitD / 40} mcg) </p>
 
       <div class="grid grid-cols-2 gap-2">
 

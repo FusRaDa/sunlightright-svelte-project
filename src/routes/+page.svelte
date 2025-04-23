@@ -1,7 +1,7 @@
 <script lang="ts">
   import Sun from "$lib/components/Sun.svelte";
   import { onMount } from 'svelte'
-  import img from '$lib/assets/sunset-7324598_1280.jpg'
+  import img from '$lib/assets/sunlightright.png'
 
   let latitude: number | null = $state(null)
   let longitude: number | null = $state(null)
@@ -131,17 +131,28 @@
 
 <div class="sm:h-full {background} justify-items-center pt-10 pb-10">
 
-  <div class="container bg-gray-500 p-3 mb-5">
-    <h1>Welcome to SvelteKit</h1>
-    <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-    <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={getLocation}>Get Weather Data</button>
-  </div>
+  <img alt="Sunlight Right Logo" width="100" height="100" src={img}/>
+  <h1 class="text-2xl font-bold text-yellow-800 underline">The Sunlight Is Your Right!</h1>
+  <p class="text-center text-yellow-800 mb-3">Every cell in your body needs vitamin D in order to function optimally. Make sure you are getting enough!</p>
 
   {#if latitude && longitude && data}
   <Sun {latitude} {longitude} {data}/>
   {:else}
-  <div>Failed to get data, button - try again</div>
+  <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
   {/if}
+
+  <div class="container bg-white">
+    <div class="grid sm:grid-cols-2 gap-2">
+      <div class="p-2">
+        <p class="text-sm text-center underline font-bold">Why Is Sunlight Vital?</p>
+      </div>
+  
+      <div class="p-2">
+        <p class="text-sm text-center underline font-bold">What's The Purpose of Vitamin D?</p>
+      </div>
+      
+    </div>
+  </div>
   
 </div>
 
