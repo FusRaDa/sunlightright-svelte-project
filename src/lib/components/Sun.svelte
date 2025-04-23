@@ -525,10 +525,14 @@
     let timeStr: string = ''
 
     rates.forEach((e, i, arr) => {
-      if (i === arr.length - 1) {
-        hoursStr += `and/or ${e.time}`
+      if (arr.length > 1) {
+        if (i === arr.length - 1) {
+          hoursStr += `and/or ${e.time}`
+        } else {
+          hoursStr += `${e.time}, `
+        }
       } else {
-        hoursStr += `${e.time}, `
+        hoursStr = `${e.time}`
       }
       total += (e.rate * 60)
     })
@@ -548,7 +552,7 @@
       finalString = `it is best to go out at ${hoursStr} for ${timeStr}.`
     } else {
 
-      finalString = "you must spend more time outside of peak sunglight hours. Be aware that prolonged exposure over may increase your risk of sunburn and skin-related cancers."
+      finalString = "you must spend more time outside of peak sunglight hours. Be aware that prolonged exposure over may increase your risk of sunburn and skin-related cancers especially when the UV index is over 6."
     }
 
 

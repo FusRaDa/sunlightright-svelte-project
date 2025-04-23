@@ -131,8 +131,8 @@
 
 <div class="sm:h-full {background} justify-items-center pt-10 pb-10">
 
-  <img alt="Sunlight Right Logo" width="100" height="100" src={img}/>
-  <h1 class="text-2xl font-bold text-yellow-800 underline">The Sunlight Is Your Right!</h1>
+  <img class="justify-self-center" alt="Sunlight Right Logo" width="100" height="100" src={img}/>
+  <h1 class="text-center text-2xl font-bold text-yellow-800 underline">The Sunlight Is Your Right!</h1>
   <p class="text-center text-yellow-800 mb-3">Every cell in your body needs vitamin D in order to function optimally. Make sure you are getting enough!</p>
 
   {#if latitude && longitude && data}
