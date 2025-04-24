@@ -792,8 +792,36 @@
       <div class="flex items-center">
         <canvas id="barChart"></canvas>
       </div>
-      <p class="text-sm text-center underline font-bold">Description how i got this data???</p>
-      <p>adsfadsfadsfasdfasdf</p>
+      <p class="text-sm text-center underline font-bold">Methods To Calculate Rates</p>
+      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al.in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, ,exposed skin surface area, and duration. </p>
+      <br>
+      <p class="text-sm">Brenner et al. states, “While Black epidermis allows only 7.4% of UVB and 17.5% of UVA to penetrate, 24% UVB and 55% UVA passes through White skin. (page. 5)” From here, I decided to create a normalized scale where I propose how much UVB is passed through each skin type.</p>
+
+      <p class="underline font-bold text-sm text-center mt-2">Fitzpatrick Scale</p>
+      <table class="text-sm border-separate border-spacing-2 border border-gray-400 dark:border-gray-500 table-auto mx-auto">
+        <thead>
+          <tr>
+            <th class="border border-gray-300">I</th>
+            <th class="border border-gray-300">II</th>
+            <th class="border border-gray-300">III</th>
+            <th class="border border-gray-300">IV</th>
+            <th class="border border-gray-300">V</th>
+            <th class="border border-gray-300">VI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300">24%</td>
+            <td class="border border-gray-300">20.6%</td>
+            <td class="border border-gray-300">17.3%</td>
+            <td class="border border-gray-300">14%</td>
+            <td class="border border-gray-300">10.7%</td>
+            <td class="border border-gray-300">7.4%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="text-sm mt-2">With these percentages, I was able to construct six sets of data for each skin type based on the original data from Miyauchi et al. You may view the spreadsheet <a class="text-blue-800" target="_blank" href="https://docs.google.com/spreadsheets/d/10Q1NNXO7l7ZDnmvvAHUgIwdjus7XbOUkNwU1CQInJm8/edit?usp=sharing">here.</a></p>
     </div>
 
     <div class="p-2">
@@ -801,6 +829,10 @@
       <div class="flex items-center">
         <canvas id="polarChart"></canvas>
       </div>
+      <p class="text-sm text-center underline font-bold mt-2">Estimating Amount Produced</p>
+      <p class="text-sm">Knowing how much Vitamin D is produced per minute, we can then calculate the estimated max gained per hour for each time of the day where the UV index is greater than zero.</p>
+      <br>
+      <p class="text-sm">Enter your daily goal to calculate the most optimal time for sunlight exposure where an adequate duration is determined while minimizing skin damage.</p>
     </div>
 
     <div class="p-2">
