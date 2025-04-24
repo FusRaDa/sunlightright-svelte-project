@@ -571,6 +571,10 @@
       buildRateChart()
       buildTotalChart()
     }
+
+    if (UVIChartData) {
+      buildUVIChart()
+    }
   })
 
   onMount(() => {
