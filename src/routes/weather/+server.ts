@@ -9,7 +9,7 @@ export async function GET({ url }) {
   const params = {
     "latitude": Number(lat),
     "longitude": Number(lon),
-    "hourly": "uv_index", //["uv_index", "sunshine_duration"]
+    "hourly": ["uv_index", "sunshine_duration"],
     "timezone": tz,
     "forecast_days": 1
   };
@@ -35,10 +35,11 @@ export async function GET({ url }) {
   // Note: The order of weather variables in the URL query and the indices below need to match!
   const weatherData: any = {
     hourly: {
-      time: range(Number(hourly.time()), Number(hourly.timeEnd()), hourly.interval()).map(
-        (t) => new Date((t + utcOffsetSeconds) * 1000)
+      time: [...Array((Number(hourly.timeEnd()) - Number(hourly.time())) / hourly.interval())].map(
+        (_, i) => new Date((Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000)
       ),
       uvIndex: hourly.variables(0)!.valuesArray()!,
+      sunshineDuration: hourly.variables(1)!.valuesArray()!,
     },
   };
 

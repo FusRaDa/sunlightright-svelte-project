@@ -350,8 +350,12 @@
     let values: Array<number> = []
 
     for (let i = 0; i < rateChartData.labels.length; i++) {
-      labels.push(rateChartData.labels[i])
-      values.push(rateChartData.datasets[0].data[i] * 60)
+      let sunDuration = 1 - (data.hourly.sunshineDuration[i] / 3600)
+      let value = Math.round(rateChartData.datasets[0].data[i] * 60 * sunDuration)
+      if (value > 0) {
+        labels.push(rateChartData.labels[i])
+        values.push(value)
+      }
     }
 
     return {
@@ -385,7 +389,7 @@
             ticks: {
               display:false
             },
-            startAngle: 225,
+            startAngle: 180,
             pointLabels: {
               display: true,
               centerPointLabels: true,
@@ -564,14 +568,15 @@
   let bmiMsg: string = $derived.by(() => {
     if (bmi >= 30) {
       let per = Math.round((bmi - 25) * 1.15)
-      let red = 30 - (30 * (per / 100))
-      return `which is categorized as obese. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (${per}%).` 
+      let red = Math.round(30 - (30 * (per / 100)))
+      return `which is categorized as obese. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (-${per}%).` 
     } 
     if (bmi >= 25 && bmi < 30) {
-      let per = Math.round(bmi - 25) * 1.15
+      let per = Math.round((bmi - 25)* 1.15)
+      console.log(per)
       if (per > 0) {
-        let red = 30 - (30 * (per / 100))
-        return `which is categorized as overweight. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (${per}%).` 
+        let red = Math.round(30 - (30 * (per / 100)))
+        return `which is categorized as overweight. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (-${per}%).` 
       }
       return "which is categorized as overweight. Which could reduce the concentrations of calcidiol in your blood."
     } 

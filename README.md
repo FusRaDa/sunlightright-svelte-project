@@ -48,6 +48,7 @@ Features
 - implement google maps with coords https://developers.google.com/maps/documentation/embed/quickstart
 - Set current Vit D goal variable & determine most optimal hours w/ less time spent under sunshine
 - Change page header to represent Sunlight Right Project
+- Added Sunshine Duration with UV index
 
 
 **Current Tasks**
@@ -59,7 +60,6 @@ Features
 - Bottom section of page should explain why this app was made
   - Vitamin D deficiency and increasing rates of chronic diseases such as cancer and cardiovascular diseases
   - Benefits of vitamin D to the human body, etc...
-- Consider Sunshine Duration with UV index!!!
 
 
 **Future Tasks**
