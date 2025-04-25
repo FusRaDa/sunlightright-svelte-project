@@ -560,6 +560,27 @@
     return finalString
   })
 
+  let bmi: number = $derived(Math.round(weight / ((height / 100)**2)))
+  let bmiMsg: string = $derived.by(() => {
+    if (bmi >= 30) {
+      let per = Math.round((bmi - 25) * 1.15)
+      let red = 30 - (30 * (per / 100))
+      return `which is categorized as obese. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (${per}%).` 
+    } 
+    if (bmi >= 25 && bmi < 30) {
+      let per = Math.round(bmi - 25) * 1.15
+      if (per > 0) {
+        let red = 30 - (30 * (per / 100))
+        return `which is categorized as overweight. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (${per}%).` 
+      }
+      return "which is categorized as overweight. Which could reduce the concentrations of calcidiol in your blood."
+    } 
+    if (bmi < 18.5) {
+      return "which is categorized as being underweight but should not decrease concentrations of calcidiol in your blood."
+    } 
+    return "which is categorized as a normal weight and is most optimal for maintaining adequate concentrations of calcidiol in your blood."
+  })
+
   function setGoal() {
     if (goal > 0) {
       localStorage.setItem('goal', String(goal))
@@ -793,9 +814,9 @@
         <canvas id="barChart"></canvas>
       </div>
       <p class="text-sm text-center underline font-bold">Methods To Calculate Rates</p>
-      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al.in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, ,exposed skin surface area, and duration. </p>
+      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al. in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, ,exposed skin surface area, and duration.</p>
       <br>
-      <p class="text-sm">Brenner et al. states, “While Black epidermis allows only 7.4% of UVB and 17.5% of UVA to penetrate, 24% UVB and 55% UVA passes through White skin. (page. 5)” From here, I decided to create a normalized scale where I propose how much UVB is passed through each skin type.</p>
+      <p class="text-sm">Brenner et al. states, “While Black epidermis allows only 7.4% of UVB and 17.5% of UVA to penetrate, 24% UVB and 55% UVA passes through White skin. (p. 5)” From here, I decided to create a normalized scale where I propose how much UVB is passed through each skin type.</p>
 
       <p class="underline font-bold text-sm text-center mt-2">Fitzpatrick Scale</p>
       <table class="text-sm border-separate border-spacing-2 border border-gray-400 dark:border-gray-500 table-auto mx-auto">
@@ -849,12 +870,16 @@
 
           <p class="text-sm underline font-bold mt-3">Optimal Times...</p>
           <p class="text-sm">
-            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, {optimalMsg}
+            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <a href="/" class="font-bold">{optimalMsg}</a>
           </p>
-
+  
           <p class="text-sm underline font-bold mt-3">Other Factors...</p>
           <p class="text-sm">
-            what other factors affect vit d production? etc...
+            Air pollution and your BMI are some of the factors that are not being accounted for in these calculations. As stated by <a target="_blank" class="text-blue-800" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4138782/?utm_source=chatgpt.com">Cipriani et al,</a> “A bidirectional genetic study, which limits confounding, has suggested that higher BMI leads to lower 25(OH)D, each unit increase in BMI being associated with 1.15% lower concentration of 25(OH)D, after adjusting for age, sex, laboratory batch, and month of measurement. (p. 3)”.
+          </p>
+          <br>
+          <p class="text-sm">
+            Your BMI is <a href="/" class="font-bold">{bmi} (kg/m²), {bmiMsg}</a> Keep in mind that fat and muscles do serve as reservoirs for vitamin D.
           </p>
         </div>
 

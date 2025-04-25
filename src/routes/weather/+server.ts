@@ -9,7 +9,7 @@ export async function GET({ url }) {
   const params = {
     "latitude": Number(lat),
     "longitude": Number(lon),
-    "hourly": "uv_index",
+    "hourly": "uv_index", //["uv_index", "sunshine_duration"]
     "timezone": tz,
     "forecast_days": 1
   };

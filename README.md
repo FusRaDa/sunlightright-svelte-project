@@ -59,6 +59,7 @@ Features
 - Bottom section of page should explain why this app was made
   - Vitamin D deficiency and increasing rates of chronic diseases such as cancer and cardiovascular diseases
   - Benefits of vitamin D to the human body, etc...
+- Consider Sunshine Duration with UV index!!!
 
 
 **Future Tasks**
