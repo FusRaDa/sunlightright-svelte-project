@@ -819,7 +819,7 @@
         <canvas id="barChart"></canvas>
       </div>
       <p class="text-sm text-center underline font-bold">Methods To Calculate Rates</p>
-      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al. in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, ,exposed skin surface area, and duration.</p>
+      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al. in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, exposed skin surface area, and duration.</p>
       <br>
       <p class="text-sm">Brenner et al. states, “While Black epidermis allows only 7.4% of UVB and 17.5% of UVA to penetrate, 24% UVB and 55% UVA passes through White skin. (p. 5)” From here, I decided to create a normalized scale where I propose how much UVB is passed through each skin type.</p>
 
@@ -889,7 +889,21 @@
         </div>
 
         <div class="p-2">
-         <p class="text-sm">According to the <a target="_blank" class="text-blue-800" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">NIH</a>, 600 IUs is recommended per day for adults ages 19-70. </p>
+          <p class="text-sm">According to the <a target="_blank" class="text-blue-800" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">NIH</a>, 600 IUs is recommended per day for adults ages 19-70. </p>
+          <br>
+          <p class="text-sm">An RDA of 600 IU’s may not be sufficient. Here is one explanation by <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=NFxQJmvgXOQ">Dr. Eric Berg</a> who proposes 8,000 to 10,000 IU’s per day. <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=-FKS7C5BcbE">Dr Ken D. Berry</a> also proposes 2,000 to 10,000 IU’s for the average adult. Most importantly, ask your doctor what they think based on your bloodwork results.</p>
+          <br>
+          <p class="text-sm underline font-bold mt-3">Symptoms of Deficiency...</p>
+          <ul class="list-decimal text-sm">
+            <li>Poor Bone Development (rickets, osteoporosis, etc...)</li>
+            <li>Fatigue</li>
+            <li>Depression</li>
+            <li>Cancer (prostate, breast, colorectal, etc...)</li>
+            <li>Muscle Weakness</li>
+          </ul>
+          <br>
+          <p class="text-sm">Should you find yourself in a location where sunlight is not enough to meet your daily needs. It is best to rely on either a UV lamp or supplements.</p>
+          <br>
         </div>
 
       </div>

@@ -138,7 +138,7 @@
   {#if latitude && longitude && data}
   <Sun {latitude} {longitude} {data}/>
   {:else}
-  <button class="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
+  <button class="mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
   {/if}
 
   <div class="container bg-white">
