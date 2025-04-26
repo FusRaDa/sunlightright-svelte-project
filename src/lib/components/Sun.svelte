@@ -205,8 +205,11 @@
     data: any
   } = $props();
 
+  let sunDurations: Array<number> = []
+
   let UVIChartData = $derived.by(() => {
     let formatData: any = {}
+
     for (let key in data.hourly.uvIndex) {
       if (data.hourly.uvIndex.hasOwnProperty(key)) {
         if (Number(key) < 12) {
@@ -280,6 +283,11 @@
     for (let key in UVIChartData.datasets[0].data) {
       let uv = Math.round(UVIChartData.datasets[0].data[key])
       if (uv > 0) {
+
+        let keys = Object.keys(UVIChartData.datasets[0].data)
+        let index = keys.indexOf(key)
+        sunDurations.push(data.hourly.sunshineDuration[index])
+
         let keySkin: string = 'skin' + String(skin)
         let keyIndex: string = 'index' + String(uv)
         if (final_bsa) {
@@ -350,7 +358,7 @@
     let values: Array<number> = []
 
     for (let i = 0; i < rateChartData.labels.length; i++) {
-      let sunDuration = 1 - (data.hourly.sunshineDuration[i] / 3600)
+      let sunDuration = (sunDurations[i] / 3600)
       let value = Math.round(rateChartData.datasets[0].data[i] * 60 * sunDuration)
       if (value > 0) {
         labels.push(rateChartData.labels[i])
@@ -856,7 +864,7 @@
         <canvas id="polarChart"></canvas>
       </div>
       <p class="text-sm text-center underline font-bold mt-2">Estimating Amount Produced</p>
-      <p class="text-sm">Knowing how much Vitamin D is produced per minute, we can then calculate the estimated max gained per hour for each time of the day where the UV index is greater than zero.</p>
+      <p class="text-sm">Knowing how much Vitamin D is produced per minute, we can then calculate the estimated max gained per hour for each time of the day where the UV index is greater than zero. This also takes into account the duration of direct sunlight.</p>
       <br>
       <p class="text-sm">Enter your daily goal to calculate the most optimal time for sunlight exposure where an adequate duration is determined while minimizing skin damage.</p>
     </div>
@@ -898,11 +906,11 @@
             <li>Poor Bone Development (rickets, osteoporosis, etc...)</li>
             <li>Fatigue</li>
             <li>Depression</li>
-            <li>Cancer (prostate, breast, colorectal, etc...)</li>
+            <li>Cancer Risk (prostate, breast, colorectal, etc...)</li>
             <li>Muscle Weakness</li>
           </ul>
           <br>
-          <p class="text-sm">Should you find yourself in a location where sunlight is not enough to meet your daily needs. It is best to rely on either a UV lamp or supplements.</p>
+          <p class="text-sm">Should you find yourself in a location where sunlight is not enough to meet your daily needs. It is may be best to rely on either a UV lamp or on supplements.</p>
           <br>
         </div>
 
