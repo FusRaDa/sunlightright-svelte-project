@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
   import Chart from 'chart.js/auto';
   import ChartDataLabels from 'chartjs-plugin-datalabels';
   import { onMount } from 'svelte';
@@ -281,17 +282,24 @@
     let values: Array<number> = []
 
     for (let key in UVIChartData.datasets[0].data) {
-      let uv = Math.round(UVIChartData.datasets[0].data[key])
-      if (uv > 0) {
 
+      let uv = UVIChartData.datasets[0].data[key]
+      if (uv > 1) {
         let keys = Object.keys(UVIChartData.datasets[0].data)
         let index = keys.indexOf(key)
         sunDurations.push(data.hourly.sunshineDuration[index])
 
+        let uvDec = uv - Math.floor(uv)
+
         let keySkin: string = 'skin' + String(skin)
-        let keyIndex: string = 'index' + String(uv)
+        let keyIndex: string = 'index' + String(Math.floor(uv))
         if (final_bsa) {
-          values.push(Math.round(VITAMIN_D_RATES[keySkin][keyIndex] * final_bsa * RADIANCE_RATES[keyIndex]))
+
+          let uvIndexOne = Math.floor(VITAMIN_D_RATES[keySkin]['index1'] * final_bsa * RADIANCE_RATES['index1'])
+          let baseRate = Math.floor(VITAMIN_D_RATES[keySkin][keyIndex] * final_bsa * RADIANCE_RATES[keyIndex])
+          let finalRate = Math.round(baseRate + (uvIndexOne * uvDec))
+
+          values.push(finalRate)
           labels.push(key)
         } else {
           values.push(0)
@@ -827,7 +835,9 @@
         <canvas id="barChart"></canvas>
       </div>
       <p class="text-sm text-center underline font-bold">Methods To Calculate Rates</p>
-      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al. in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, exposed skin surface area, and duration.</p>
+      <p class="text-sm">The method used to calculate the production of vitamin D is drawn from studies conducted by <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/php.12651">Miyauchi et al.</a> and <a class="text-blue-800" target="_blank" href="https://onlinelibrary.wiley.com/doi/10.1111/j.1751-1097.2007.00226.x">Brenner et al.</a> Based on the data gathered by Miyachi et al. in table I, they were able to determine how much vitamin D a person with a type III skin (Fitzpatrick scale) can produce based on the UV index, irradiances for erythema, exposed skin surface area, and duration.
+        <b>Note that this chart is only considering the UV index. In the next chart you will see a more accurate depiction where sunshine duration is considered.</b>
+      </p>
       <br>
       <p class="text-sm">Brenner et al. states, “While Black epidermis allows only 7.4% of UVB and 17.5% of UVA to penetrate, 24% UVB and 55% UVA passes through White skin. (p. 5)” From here, I decided to create a normalized scale where I propose how much UVB is passed through each skin type.</p>
 
@@ -883,7 +893,7 @@
 
           <p class="text-sm underline font-bold mt-3">Optimal Times...</p>
           <p class="text-sm">
-            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <a href="/" class="font-bold">{optimalMsg}</a>
+            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <b>{optimalMsg}</b>
           </p>
   
           <p class="text-sm underline font-bold mt-3">Other Factors...</p>
@@ -892,7 +902,7 @@
           </p>
           <br>
           <p class="text-sm">
-            Your BMI is <a href="/" class="font-bold">{bmi} (kg/m²), {bmiMsg}</a> Keep in mind that fat and muscles do serve as reservoirs for vitamin D.
+            Your BMI is <b>{bmi} (kg/m²), {bmiMsg}</b> Keep in mind that fat and muscles do serve as reservoirs for vitamin D.
           </p>
         </div>
 
