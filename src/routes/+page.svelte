@@ -15,6 +15,10 @@
     if (latitude && longitude && timezone) {
       getWeather()
     }
+
+    if (data) {
+      setBackground(data)
+    }
   })
 
   function getLocation(): void {
@@ -50,10 +54,6 @@
   }
 
   async function getWeather() {
-    if (data !== null) {
-      setBackground(data)
-    }
-
     const lsLatitude = localStorage.getItem('latitude')
     const lsLongitude = localStorage.getItem('longitude')
     
@@ -61,9 +61,7 @@
       console.log("api fetch")
       const response = await fetch(`/weather?lat=${latitude}&lon=${longitude}&tz=${timezone}`)
       data = await response.json()
-      setBackground(data)
-      let date = new Date(data.hourly.time[0].split("T")[0])
-      currentDate = date.getUTCDate()
+      currentDate = new Date().getDate()
 
       localStorage.setItem('data', JSON.stringify(data))
       localStorage.setItem('currentDate', String(currentDate))
