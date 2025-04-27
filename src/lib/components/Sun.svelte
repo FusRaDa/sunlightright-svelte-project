@@ -207,6 +207,7 @@
   } = $props();
 
   let sunDurations: Array<number> = []
+  let sunRates: Array<number> = []
 
   let UVIChartData = $derived.by(() => {
     let formatData: any = {}
@@ -369,6 +370,7 @@
       let sunDuration = (sunDurations[i] / 3600)
       let value = Math.round(rateChartData.datasets[0].data[i] * 60 * sunDuration)
       if (value > 0) {
+        sunRates.push(rateChartData.datasets[0].data[i])
         labels.push(rateChartData.labels[i])
         values.push(value)
       }
@@ -521,63 +523,100 @@
     interface OptimalRates {
       time: string,
       rate: number,
+      total: number,
     }
-    let rates: Array<OptimalRates> = []
 
-    for (let i = 0; i < rateChartData.labels.length; i++) {
-      if (rates.length === 0) {
-        rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
-      } else {
-        if (rateChartData.datasets[0].data[i] === rates[0]['rate']) {
-          rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
+    let optimalTimes: Array<OptimalRates> = []
+    
+    let highestTotal = totalChartData.datasets[0].data[0]
+    let startingIndex = 0
+    for (let i = 0; i < totalChartData.labels.length; i++) {
+      let total = totalChartData.datasets[0].data[i]
+      if (total > highestTotal) {
+        highestTotal = total
+        startingIndex = i
+      }
+      
+      let hour = {
+        time: totalChartData.labels[i],
+        rate: sunRates[i],
+        total: total
+      }
+      optimalTimes.push(hour)
+    }
+
+    let totalOptimalTotals = 0
+    for (let i = startingIndex; i < optimalTimes.length; i++) {
+      totalOptimalTotals += optimalTimes[i].total
+    }
+
+    let time = 0 //start as minutes
+    let ius = 0
+    let times: Array<string> = []
+    if (goal > 0 && goal <= totalOptimalTotals) {
+      for (let i = startingIndex; i < optimalTimes.length; i++) {
+        times.push(optimalTimes[i].time)
+
+        let currentIUs = ius
+        while (ius <= goal && ius < optimalTimes[i].total + currentIUs) {
+          ius += optimalTimes[i].rate
+          time += 1
         }
 
-        if (rateChartData.datasets[0].data[i] > rates[0]['rate']) {
-          rates = []
-          rates.push({'time': rateChartData.labels[i], 'rate': rateChartData.datasets[0].data[i]})
-        } 
-      }
-    }
+        if (ius >= goal) {
+          break
+        }
 
-    let finalString: string = ''
-    let hoursStr: string = ''
-    let total: number = 0
-    let timeStr: string = ''
+      } 
 
-    rates.forEach((e, i, arr) => {
-      if (arr.length > 1) {
-        if (i === arr.length - 1) {
-          hoursStr += `and/or ${e.time}`
+      let hoursStr: string = ''
+      times.forEach((e, i , arr) => {
+        if (arr.length > 1) {
+          if (i === arr.length - 1) {
+            hoursStr += `and ${e}`
+          } else {
+            hoursStr += `${e}, `
+          }
         } else {
-          hoursStr += `${e.time}, `
+          hoursStr = `${e}`
         }
+      })
+
+      let timeStr: string = ''
+      if (time < 60) {
+        timeStr = time + " minutes"
       } else {
-        hoursStr = `${e.time}`
+
+        let hours = Math.floor(time / 60)
+        let minutes = time % 60
+
+        timeStr = hours + " hour(s) and " + minutes + " minute(s)." 
       }
-      total += (e.rate * 60)
-    })
-
-    let min: number = 1
-    let withinHours: boolean = false
-    while (min < (rates.length * 60) && goal <= total) {
-      if (rates[0].rate * min > goal) {
-        withinHours = true
-        break
-      }
-      min++
-    } 
-
-    if (withinHours) {
-      timeStr = String(min) + ' minutes'
-      finalString = `it is best to go out at ${hoursStr} for ${timeStr}.`
-    } else {
-
-      finalString = "you must spend more time outside of peak sunglight hours. Be aware that prolonged exposure over may increase your risk of sunburn and skin-related cancers especially when the UV index is over 6."
+      
+      return `you will have to be outside at ${hoursStr} for ${timeStr}`
     }
 
+    if (goal > totalOptimalTotals && goal <= totalVitD) {
+      let hoursStr: string = ''
+      optimalTimes.forEach((e, i , arr) => {
+        if (arr.length > 1) {
+          if (i === arr.length - 1) {
+            hoursStr += `and ${e.time}`
+          } else {
+            hoursStr += `${e.time}, `
+          }
+        } else {
+          hoursStr = `${e.time}`
+        }
+      })
+      return "you will have to be outside for all hours of " + hoursStr + ". Consider using vitamin D supplements or a UV lamp to reach your daily goal." 
+    }
 
+    if (goal > totalVitD) {
+      return "consider increasing skin exposure as today's sunlight, with your current factors, are not enough to meet your daily goal. You may also consider using supplements or a UV lamp to reach your daily goal."
+    }
 
-    return finalString
+    return 'enter your daily goal to calculate.'
   })
 
   let bmi: number = $derived(Math.round(weight / ((height / 100)**2)))
@@ -891,11 +930,6 @@
             <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=400 bind:value={goal} onchange={setGoal}>
           </div>
 
-          <p class="text-sm underline font-bold mt-3">Optimal Times...</p>
-          <p class="text-sm">
-            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <b>{optimalMsg}</b>
-          </p>
-  
           <p class="text-sm underline font-bold mt-3">Other Factors...</p>
           <p class="text-sm">
             Air pollution and your BMI are some of the factors that are not being accounted for in these calculations. As stated by <a target="_blank" class="text-blue-800" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4138782/?utm_source=chatgpt.com">Cipriani et al,</a> “A bidirectional genetic study, which limits confounding, has suggested that higher BMI leads to lower 25(OH)D, each unit increase in BMI being associated with 1.15% lower concentration of 25(OH)D, after adjusting for age, sex, laboratory batch, and month of measurement. (p. 3)”.
@@ -907,21 +941,14 @@
         </div>
 
         <div class="p-2">
+          <p class="text-sm underline font-bold">Optimal Times...</p>
+          <p class="text-sm">
+            To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <b>{optimalMsg}</b>
+          </p>
+          <br>
           <p class="text-sm">According to the <a target="_blank" class="text-blue-800" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">NIH</a>, 600 IUs is recommended per day for adults ages 19-70. </p>
           <br>
           <p class="text-sm">An RDA of 600 IU’s may not be sufficient. Here is one explanation by <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=NFxQJmvgXOQ">Dr. Eric Berg</a> who proposes 8,000 to 10,000 IU’s per day. <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=-FKS7C5BcbE">Dr Ken D. Berry</a> also proposes 2,000 to 10,000 IU’s for the average adult. Most importantly, ask your doctor what they think based on your bloodwork results.</p>
-          <br>
-          <p class="text-sm underline font-bold mt-3">Symptoms of Deficiency...</p>
-          <ul class="list-decimal text-sm">
-            <li>Poor Bone Development (rickets, osteoporosis, etc...)</li>
-            <li>Fatigue</li>
-            <li>Depression</li>
-            <li>Cancer Risk (prostate, breast, colorectal, etc...)</li>
-            <li>Muscle Weakness</li>
-          </ul>
-          <br>
-          <p class="text-sm">Should you find yourself in a location where sunlight is not enough to meet your daily needs. It is may be best to rely on either a UV lamp or on supplements.</p>
-          <br>
         </div>
 
       </div>
