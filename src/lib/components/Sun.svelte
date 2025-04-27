@@ -532,7 +532,7 @@
     let startingIndex = 0
     for (let i = 0; i < totalChartData.labels.length; i++) {
       let total = totalChartData.datasets[0].data[i]
-      if (total > highestTotal) {
+      if (total > highestTotal + (goal * 0.50)) { // the 0.5 is a tolerance of what hour provides the most vit d
         highestTotal = total
         startingIndex = i
       }
@@ -591,10 +591,15 @@
         let hours = Math.floor(time / 60)
         let minutes = time % 60
 
-        timeStr = hours + " hour(s) and " + minutes + " minute(s)." 
+        if (minutes > 0) {
+          timeStr = hours + " hour(s) and " + minutes + " minute(s)" 
+        } else {
+          timeStr = hours + " hour(s)"
+        }
+
       }
       
-      return `you will have to be outside at ${hoursStr} for ${timeStr}`
+      return `you will have to be outside at ${hoursStr} for ${timeStr}.`
     }
 
     if (goal > totalOptimalTotals && goal <= totalVitD) {

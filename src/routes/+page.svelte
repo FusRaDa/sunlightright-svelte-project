@@ -57,11 +57,11 @@
     const lsLatitude = localStorage.getItem('latitude')
     const lsLongitude = localStorage.getItem('longitude')
     
-    if (currentDate !== new Date().getDate() || Math.trunc(Number(latitude)) !== Math.trunc(Number(lsLatitude)) || Math.trunc(Number(longitude)) !== Math.trunc(Number(lsLongitude))) {
+    if (currentDate !== new Date().getHours() || Math.trunc(Number(latitude)) !== Math.trunc(Number(lsLatitude)) || Math.trunc(Number(longitude)) !== Math.trunc(Number(lsLongitude))) {
       console.log("api fetch")
       const response = await fetch(`/weather?lat=${latitude}&lon=${longitude}&tz=${timezone}`)
       data = await response.json()
-      currentDate = new Date().getDate()
+      currentDate = new Date().getHours()
 
       localStorage.setItem('data', JSON.stringify(data))
       localStorage.setItem('currentDate', String(currentDate))
