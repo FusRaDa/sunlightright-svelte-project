@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
   import Chart from 'chart.js/auto';
   import ChartDataLabels from 'chartjs-plugin-datalabels';
   import { onMount } from 'svelte';
@@ -251,7 +250,6 @@
     let chartStatus = Chart.getChart("lineChart")
     if (chartStatus != undefined) {
       chartStatus.destroy();
-      console.log('dest')
     }
 
     var ctx: any = document.getElementById('lineChart');
@@ -279,6 +277,7 @@
   }
 
   let rateChartData = $derived.by(() => {
+    sunDurations = []
     let labels: Array<string> = []
     let values: Array<number> = []
 
@@ -288,6 +287,7 @@
       if (uv > 1) {
         let keys = Object.keys(UVIChartData.datasets[0].data)
         let index = keys.indexOf(key)
+
         sunDurations.push(data.hourly.sunshineDuration[index])
 
         let uvDec = uv - Math.floor(uv)
@@ -327,7 +327,6 @@
     let chartStatus = Chart.getChart("barChart")
     if (chartStatus != undefined) {
       chartStatus.destroy();
-      console.log('dest')
     }
 
     var ctx: any = document.getElementById('barChart');
@@ -363,6 +362,7 @@
   }
 
   let totalChartData = $derived.by(() => {
+    sunRates = []
     let labels: Array<string> = []
     let values: Array<number> = []
 
@@ -561,6 +561,7 @@
         while (ius <= goal && ius < optimalTimes[i].total + currentIUs) {
           ius += optimalTimes[i].rate
           time += 1
+          console.log(optimalTimes[i].total)
         }
 
         if (ius >= goal) {
@@ -628,7 +629,6 @@
     } 
     if (bmi >= 25 && bmi < 30) {
       let per = Math.round((bmi - 25)* 1.15)
-      console.log(per)
       if (per > 0) {
         let red = Math.round(30 - (30 * (per / 100)))
         return `which is categorized as overweight. The normal average amount of calcidiol in the blood is 30 ng/mL and could be reduced to ${red} ng/ml (-${per}%).` 

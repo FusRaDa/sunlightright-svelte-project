@@ -120,10 +120,6 @@
     // Client-side only code here
     getLocation()
   });
-
-  $inspect(data)
-  //$inspect(background)
-  //$inspect(currentDate)
 </script>
 
 

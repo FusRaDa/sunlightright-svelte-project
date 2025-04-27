@@ -61,6 +61,10 @@ Features
   - Vitamin D deficiency and increasing rates of chronic diseases such as cancer and cardiovascular diseases
   - Benefits of vitamin D to the human body, etc...
 
+- Add Button to reset fetched api data OR enable an hour variable!!!
+- slight improvement to optimal message show no minutes if minutes is 0, and tolerage of starting highest total
+
+
 
 **Future Tasks**
 - Implement Google Analytics
