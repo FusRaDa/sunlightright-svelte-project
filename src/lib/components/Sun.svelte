@@ -561,7 +561,6 @@
         while (ius <= goal && ius < optimalTimes[i].total + currentIUs) {
           ius += optimalTimes[i].rate
           time += 1
-          console.log(optimalTimes[i].total)
         }
 
         if (ius >= goal) {

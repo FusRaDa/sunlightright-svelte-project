@@ -54,14 +54,14 @@ Features
   - Explain how skin tone, age, bsa, unilateral exposure, and exposure affect these rates
 - Explain other factors that were not accounted for such as BMI
 - Depict RDA of vitamin D and question adequacy and risks of too much solar radiation
+- Implement Google Analytics
 
 
 **Current Tasks**
-- Bottom section of page should explain why this app was made
-  - Vitamin D deficiency and increasing rates of chronic diseases such as cancer and cardiovascular diseases
-  - Benefits of vitamin D to the human body, etc...
-  - introduce yourself as the developer and student
+- Bottom section of page should explain two things:
+  - the importance of sunlight
+  - introduction of developer (you) w/ links like Linkedln
 
 
 **Future Tasks**
-- Implement Google Analytics (last task)
+- improve optimalmsg in finding a better range of sun peaks
