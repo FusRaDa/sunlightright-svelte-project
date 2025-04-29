@@ -55,6 +55,7 @@ Features
 - Explain other factors that were not accounted for such as BMI
 - Depict RDA of vitamin D and question adequacy and risks of too much solar radiation
 - Implement Google Analytics
+- Add Reset button if second section does not show up
 
 
 **Current Tasks**

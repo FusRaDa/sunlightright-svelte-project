@@ -110,10 +110,10 @@
 
   function resetData() {
     localStorage.removeItem('data')
-      localStorage.removeItem('currentDate')
-      localStorage.removeItem('latitude')
-      localStorage.removeItem('longitude')
-      getLocation()
+    localStorage.removeItem('currentDate')
+    localStorage.removeItem('latitude')
+    localStorage.removeItem('longitude')
+    location.reload()
   }
 
   onMount(() => {
@@ -131,8 +131,6 @@
 
   {#if latitude && longitude && data}
   <Sun {latitude} {longitude} {data}/>
-  {:else}
-  <button class="mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
   {/if}
 
   <div class="container bg-white">
@@ -142,11 +140,15 @@
       </div>
   
       <div class="p-2">
-        <p class="text-sm text-center underline font-bold">What's The Purpose of Vitamin D?</p>
+        <p class="text-sm text-center underline font-bold">Christopher M. Rada</p>
       </div>
       
     </div>
   </div>
+
+  <p class="text-center font-bold mt-3">Data Not Loading?</p>
+  <button class="mb-3 mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
+  
   
 </div>
 
