@@ -147,9 +147,8 @@
   </div>
 
   <p class="text-center font-bold mt-3">Data Not Loading?</p>
-  <button class="mb-3 mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
-  
-  
+  <button class="justify-self-center mb-3 mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
+
 </div>
 
 

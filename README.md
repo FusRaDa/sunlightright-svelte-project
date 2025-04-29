@@ -55,7 +55,7 @@ Features
 - Explain other factors that were not accounted for such as BMI
 - Depict RDA of vitamin D and question adequacy and risks of too much solar radiation
 - Implement Google Analytics
-- Add Reset button if second section does not show up
+- Add Reset button at very bottom of page
 
 
 **Current Tasks**
@@ -65,4 +65,4 @@ Features
 
 
 **Future Tasks**
-- improve optimalmsg in finding a better range of sun peaks
+- improve optimalmsg in finding a better range of sun peaks & remind the chosen factors.
