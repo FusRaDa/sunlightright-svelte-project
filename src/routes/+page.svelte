@@ -146,10 +146,10 @@
     </div>
   </div>
 
-  <div class="justify-items-center">
-    <p class="text-center font-bold mt-3">Data Not Loading?</p>
-    <button class="text-center mb-3 mx-auto bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded" onclick={resetData}>Reset Data</button>
+  <div class="mt-3">
+    <a href="/" type="button" class="text-center font-bold text-blue-800 underline hover:text-blue-400" onclick={resetData}>Data Not Loading?</a>
   </div>
+
 
 </div>
 
