@@ -950,6 +950,10 @@
             To get your daily goal of {goal} IUs ({goal / 40} mcg) of vitamin D with the least amount of time spent under the sun, <b>{optimalMsg}</b>
           </p>
           <br>
+          <p class="text-sm">
+            If you know your current vitamin D levels and are deficient, use this <a class="text-blue-800" target="_blank" href="https://www.grassrootshealth.net/project/dcalculator/">calculator</a> to determine your daily needs in order to raise your levels.
+          </p>
+          <br>
           <p class="text-sm">According to the <a target="_blank" class="text-blue-800" href="https://ods.od.nih.gov/factsheets/VitaminD-Consumer/">NIH</a>, 600 IUs is recommended per day for adults ages 19-70. </p>
           <br>
           <p class="text-sm">An RDA of 600 IU’s may not be sufficient. Here is one explanation by <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=NFxQJmvgXOQ">Dr. Eric Berg</a> who proposes 8,000 to 10,000 IU’s per day. <a class="text-blue-800" target="_blank" href="https://www.youtube.com/watch?v=-FKS7C5BcbE">Dr Ken D. Berry</a> also proposes 2,000 to 10,000 IU’s for the average adult. Most importantly, ask your doctor what they think based on your bloodwork results.</p>
