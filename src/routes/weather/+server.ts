@@ -17,18 +17,18 @@ export async function GET({ url }) {
   const responses = await fetchWeatherApi(api_url, params);
 
   // Helper function to form time ranges
-  const range = (start: number, stop: number, step: number) =>
-    Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
+  // const range = (start: number, stop: number, step: number) =>
+  //   Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
   // Process first location. Add a for-loop for multiple locations or weather models
   const response = responses[0];
 
   // Attributes for timezone and location
   const utcOffsetSeconds = response.utcOffsetSeconds();
-  const timezone = response.timezone();
-  const timezoneAbbreviation = response.timezoneAbbreviation();
-  const latitude = response.latitude();
-  const longitude = response.longitude();
+  // const timezone = response.timezone();
+  // const timezoneAbbreviation = response.timezoneAbbreviation();
+  // const latitude = response.latitude();
+  // const longitude = response.longitude();
 
   const hourly = response.hourly()!;
 
