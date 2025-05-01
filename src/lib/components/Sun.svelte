@@ -822,11 +822,6 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-center">
-          <p class="text-sm">Unilateral Exposure &nbsp;</p>
-          <input type="checkbox" bind:checked={unilateral}/>
-        </div>
-
         <div>
           <div>
             <p class="text-sm text-center underline font-bold">Exposure</p>
@@ -862,6 +857,12 @@
               {/if}
             </div>
           </div>
+
+          <div class="flex items-center justify-center mt-1">
+            <p class="text-sm">Unilateral Exposure &nbsp;</p>
+            <input type="checkbox" bind:checked={unilateral}/>
+          </div>
+
         </div>
       </div>
     </div>

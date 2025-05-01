@@ -137,10 +137,29 @@
     <div class="grid sm:grid-cols-2 gap-2">
       <div class="p-2">
         <p class="text-sm text-center underline font-bold">Why Is Sunlight Vital?</p>
+        <p class="text-sm">Sunlight exposure, specifically vitamin D, offers benefits to both your physical and mental well-being. How the body uses vitamin D is a complicated process and often involves several metabolic processes. I’ve linked some videos and articles for you to learn more about.</p>
+        <br>
+   
+        <ul class="list-decimal text-sm ms-4">
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2669834/">Calcium and Vitamin D: Skeletal and Extraskeletal Health</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://www.youtube.com/watch?v=D_UJaEZe9gg">Exposing the links between Calcium, Vitamin K2, and Plaque Buildup in Blood Vessels</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7926526/">The Medical Benefits of Vitamin K2 on Calcium-Related Disorders</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://www.degruyterbrill.com/document/doi/10.7556/jaoa.2018.037/html">Role of Magnesium in Vitamin D Activation and Function</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://www.sciencedirect.com/science/article/pii/S0014480023000175#:~:text=Vit%2DD%20regulates%20the%20differentiation,et%20al.%2C%202019">A review of the critical role of vitamin D axis on the immune system</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7281985/">Vitamin D’s Effect on Immune Function</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6821324/">Vitamin D supplementation and total cancer incidence and mortality: a meta-analysis of randomized controlled trials</a></li>
+          <li><a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5440113/">Vitamin D and Chronic Diseases</a></li>
+        </ul>
+
       </div>
   
       <div class="p-2">
-        <p class="text-sm text-center underline font-bold">Christopher M. Rada</p>
+        <p class="text-sm text-center underline font-bold">The Project Developer</p>
+        <p class="text-sm">Hello and thank you for visiting my web application! My name is Matthew Rada and this is my first programming biology-related project. I am currently pursuing a MS in bioinformatics and am looking to graduate by the end of 2026.</p>
+        <br>
+        <p class="text-sm">I made this website as a means of connecting the relations between sunlight and vitamin D production. By no means do I consider myself an expert in this field but rather a student doing my best to interpret the information I have found from scientific sources such as PubMed and the NIH.</p>
+        <br>
+        <p class="text-sm">Beyond that, I will continue to build my portfolio as I am looking for job opportunities related to software engineering and data science. If you come across a bug, have questions, or want to reach out you can email me at <a class="text-blue-800 hover:text-blue-600" href="mailto:matthewr7.christopher@gmail.com">matthewr7.christopher@gmail.com</a> or message me on <a target="_blank" class="text-blue-800 hover:text-blue-600" href="https://www.linkedin.com/in/christopher-rada-a657a51b6/">LinkedIn</a>.</p>
       </div>
       
     </div>
