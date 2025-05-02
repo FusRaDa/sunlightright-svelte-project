@@ -59,10 +59,11 @@ Features
 
 
 **Current Tasks**
-- improve optimalmsg in finding a better range of sun peaks & remind the chosen factors.
+- Add section to turn on location if location is off.
 - Bottom section of page should explain two things:
   - the importance of sunlight
   - introduction of developer (you) w/ links like Linkedln
 
 
 **Future Tasks**
+- improve optimalmsg in finding a better range of sun peaks & remind the chosen factors.

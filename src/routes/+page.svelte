@@ -131,6 +131,15 @@
 
   {#if latitude && longitude && data}
   <Sun {latitude} {longitude} {data}/>
+  {:else}
+  <div class="container bg-white mb-5">
+    <div class="grid sm:grid-cols-1 gap-2">
+      <div class="p-2">
+        <p class="text-sm text-center underline font-bold">Not Seeing Any Data?</p>
+        <p class="text-sm text-center">Allow your browser to get your location as this app requires today's UV index in your area.</p>
+      </div>
+    </div>
+  </div>
   {/if}
 
   <div class="container bg-white">
