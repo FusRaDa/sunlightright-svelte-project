@@ -56,10 +56,11 @@ Features
 - Depict RDA of vitamin D and question adequacy and risks of too much solar radiation
 - Implement Google Analytics
 - Add Reset button/text at very bottom of page
+- Add section to turn on location if location is off.
 
 
 **Current Tasks**
-- Add section to turn on location if location is off.
+- Add empirical option for height and weight
 - Bottom section of page should explain two things:
   - the importance of sunlight
   - introduction of developer (you) w/ links like Linkedln

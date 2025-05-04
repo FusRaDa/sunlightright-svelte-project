@@ -130,12 +130,20 @@
   // factors
   let skin: number = $state(1)
   let age: number = $state(1)
+  
+  let is_empirical: boolean = $state(false)
   let height: number = $state(0)
   let weight: number = $state(0)
   let bsa: number | null = $derived.by(() => {
     if (height > 0 && weight > 0) {
       localStorage.setItem('height', String(height))
       localStorage.setItem('weight', String(weight))
+
+      if (is_empirical) {
+        let num =  0.007184 * ((height * 2.54)**0.725) * ((weight / 2.205)**0.425) //du bois formula
+        return Math.round(num * 100) / 100
+      }
+
       let num =  0.007184 * (height**0.725) * (weight**0.425) //du bois formula
       return Math.round(num * 100) / 100
     }
@@ -624,7 +632,13 @@
     return 'enter your daily goal to calculate.'
   })
 
-  let bmi: number = $derived(Math.round(weight / ((height / 100)**2)))
+  let bmi: number = $derived.by(() => {
+    if (is_empirical) {
+      return Math.round((weight / 2.205) / (((height * 2.54) / 100)**2))
+    }
+    return Math.round(weight / ((height / 100)**2))
+  })
+  
   let bmiMsg: string = $derived.by(() => {
     if (bmi >= 30) {
       let per = Math.round((bmi - 25) * 1.15)
@@ -644,6 +658,18 @@
     } 
     return "which is categorized as a normal weight and is most optimal for maintaining adequate concentrations of calcidiol in your blood."
   })
+
+  function setEmpirical() {
+    localStorage.setItem('is_empirical', String(!is_empirical))
+    
+    if (!is_empirical === true) {
+      height = Math.round(height / 2.54)
+      weight = Math.round(weight * 2.205)
+    } else {
+      height = Math.round(height * 2.54)
+      weight = Math.round(weight / 2.205)
+    }
+  }
 
   function setGoal() {
     if (goal > 0) {
@@ -694,6 +720,14 @@
       goal = Number(lsGoal)
     }
 
+    const lsIsEmpirical = localStorage.getItem('is_empirical')
+    if (lsIsEmpirical === 'true') {
+      is_empirical = true
+    } 
+    if (lsIsEmpirical === 'false') {
+      is_empirical = false
+    }
+
     //build charts
     Chart.register(ChartDataLabels);
     buildUVIChart()
@@ -718,10 +752,13 @@
       <div class="flex items-center">
         <canvas id="lineChart"></canvas>
       </div>
+      <div class="flex items-center justify-center mt-1">
+        <p class="text-sm">**Weather data is subject to change every hour.**</p>
+      </div>
     </div>
 
     <div class="p-2">
-      <div class="grid grid-rows-3 gap-4">
+      <div class="grid grid-rows-3 gap-1">
         <div>
           <p class="text-sm text-center underline font-bold">Skin Type (Fitzpatrick Scale)</p>
           <div class="grid grid-cols-6 gap-1">
@@ -796,18 +833,24 @@
 
         <div>
           <p class="text-sm text-center underline font-bold">Body Surface Area (Du Bois Formula)</p>
+          
+          <div class="flex items-center justify-center">
+            <p class="text-sm">Empirical Units &nbsp;</p>
+            <input type="checkbox" onclick={setEmpirical} bind:checked={is_empirical}/>
+          </div>
+
           <div class="grid grid-cols-3 gap-1">
 
             <div class="mt-2">
               <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">Hgt. (cm) &nbsp;</div>
+                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">{#if is_empirical} Hgt. (in) &nbsp; {:else} Hgt. (cm) &nbsp; {/if}</div>
                 <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=0 max=305 bind:value={height}>
               </div>
             </div>
 
             <div class="mt-2">
               <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">Wgt. (kg) &nbsp;</div>
+                <div class="shrink-0 text-xs text-gray-500 select-none sm:text-sm/6">{#if is_empirical} Wgt. (lb) &nbsp; {:else} Wgt. (kg) &nbsp; {/if}</div>
                 <input type="number" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" min=0 max=500 bind:value={weight}>
               </div>
             </div>
